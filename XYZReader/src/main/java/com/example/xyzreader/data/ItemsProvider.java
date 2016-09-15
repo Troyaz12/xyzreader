@@ -28,7 +28,7 @@ public class ItemsProvider extends ContentProvider {
 	private static final UriMatcher sUriMatcher = buildUriMatcher();
 
 	private static UriMatcher buildUriMatcher() {
-		final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
+		final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);	//used to match the URI
 		final String authority = ItemsContract.CONTENT_AUTHORITY;
 		matcher.addURI(authority, "items", ITEMS);
 		matcher.addURI(authority, "items/#", ITEMS__ID);
@@ -43,7 +43,7 @@ public class ItemsProvider extends ContentProvider {
 
 	@Override
 	public String getType(Uri uri) {
-		final int match = sUriMatcher.match(uri);
+		final int match = sUriMatcher.match(uri);	//match the uri that was passed in
 		switch (match) {
 			case ITEMS:
 				return ItemsContract.Items.CONTENT_TYPE;
@@ -57,7 +57,7 @@ public class ItemsProvider extends ContentProvider {
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 		final SQLiteDatabase db = mOpenHelper.getReadableDatabase();
-		final SelectionBuilder builder = buildSelection(uri);
+		final SelectionBuilder builder = buildSelection(uri);			//selectionBuilder Instead of composing statements manually using string concatenation, method calls are used to construct the statement one clause at a time.
 		Cursor cursor = builder.where(selection, selectionArgs).query(db, projection, sortOrder);
         if (cursor != null) {
             cursor.setNotificationUri(getContext().getContentResolver(), uri);
@@ -104,7 +104,8 @@ public class ItemsProvider extends ContentProvider {
 	}
 
 	private SelectionBuilder buildSelection(Uri uri, int match, SelectionBuilder builder) {
-		final List<String> paths = uri.getPathSegments();
+		final List<String> paths = uri.getPathSegments();		//Gets the decoded path segments.
+
 		switch (match) {
 			case ITEMS: {
 				return builder.table(Tables.ITEMS);

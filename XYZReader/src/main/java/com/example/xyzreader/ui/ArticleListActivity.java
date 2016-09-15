@@ -63,8 +63,8 @@ public class ArticleListActivity extends ActionBarActivity implements
     @Override
     protected void onStart() {
         super.onStart();
-        registerReceiver(mRefreshingReceiver,                        //applicationsmay send broadcasts to this registered receiver
-                new IntentFilter(UpdaterService.BROADCAST_ACTION_STATE_CHANGE));
+        registerReceiver(mRefreshingReceiver,        //applications may send broadcasts to this registered receiver
+                new IntentFilter(UpdaterService.BROADCAST_ACTION_STATE_CHANGE));  //specifies the type of intents it accepts based on the intent's action, data, and category
     }
 
     @Override
@@ -73,36 +73,36 @@ public class ArticleListActivity extends ActionBarActivity implements
         unregisterReceiver(mRefreshingReceiver);
     }
 
-    private boolean mIsRefreshing = false;
+    private boolean mIsRefreshing = false; //does the app need to refresh
 
     private BroadcastReceiver mRefreshingReceiver = new BroadcastReceiver() {
         @Override
-        public void onReceive(Context context, Intent intent) {
-            if (UpdaterService.BROADCAST_ACTION_STATE_CHANGE.equals(intent.getAction())) {
-                mIsRefreshing = intent.getBooleanExtra(UpdaterService.EXTRA_REFRESHING, false);
-                updateRefreshingUI();
+        public void onReceive(Context context, Intent intent) {     //recieved a broadcast
+            if (UpdaterService.BROADCAST_ACTION_STATE_CHANGE.equals(intent.getAction())) {  //if the action state changed
+                mIsRefreshing = intent.getBooleanExtra(UpdaterService.EXTRA_REFRESHING, false);  //its refreshing
+                updateRefreshingUI();   //refresh the uri
             }
         }
     };
 
     private void updateRefreshingUI() {
-        mSwipeRefreshLayout.setRefreshing(mIsRefreshing);
+        mSwipeRefreshLayout.setRefreshing(mIsRefreshing);  //notify that the refresh state has changed
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return ArticleLoader.newAllArticlesInstance(this);
+        return ArticleLoader.newAllArticlesInstance(this);  //returns data of items table
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         Adapter adapter = new Adapter(cursor);
-        adapter.setHasStableIds(true);
+        adapter.setHasStableIds(true);  //can each item in dataset be represented with a unique identifier
         mRecyclerView.setAdapter(adapter);
-        int columnCount = getResources().getInteger(R.integer.list_column_count);
+        int columnCount = getResources().getInteger(R.integer.list_column_count);  //gets number of columns available from the macro_layout.xml file
         StaggeredGridLayoutManager sglm =
-                new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(sglm);
+                new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL); //creates a new verticle staggard grid
+        mRecyclerView.setLayoutManager(sglm); //set layout to RecycleView
     }
 
     @Override
@@ -124,21 +124,21 @@ public class ArticleListActivity extends ActionBarActivity implements
         }
 
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {    // will be used to display items of the adapter using onBindViewHolder
             View view = getLayoutInflater().inflate(R.layout.list_item_article, parent, false);
             final ViewHolder vh = new ViewHolder(view);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     startActivity(new Intent(Intent.ACTION_VIEW,
-                            ItemsContract.Items.buildItemUri(getItemId(vh.getAdapterPosition()))));
+                            ItemsContract.Items.buildItemUri(getItemId(vh.getAdapterPosition()))));  //gets the URI of the item selected
                 }
             });
             return vh;
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
+        public void onBindViewHolder(ViewHolder holder, int position) { //updates the RecyclerView.ViewHolder contents with the item at the given position
             mCursor.moveToPosition(position);
             holder.titleView.setText(mCursor.getString(ArticleLoader.Query.TITLE));
             holder.subtitleView.setText(
@@ -165,7 +165,7 @@ public class ArticleListActivity extends ActionBarActivity implements
         public TextView titleView;
         public TextView subtitleView;
 
-        public ViewHolder(View view) {
+        public ViewHolder(View view) {  //creates views to be bound
             super(view);
             thumbnailView = (DynamicHeightNetworkImageView) view.findViewById(R.id.thumbnail);
             titleView = (TextView) view.findViewById(R.id.article_title);

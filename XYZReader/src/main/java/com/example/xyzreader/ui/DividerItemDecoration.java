@@ -23,7 +23,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-public class DividerItemDecoration extends RecyclerView.ItemDecoration {
+public class DividerItemDecoration extends RecyclerView.ItemDecoration { //ItemDecoration allows the application to add a special drawing and layout offset to specific item views from the adapter's data set
 
     private static final int[] ATTRS = new int[]{
             android.R.attr.listDivider

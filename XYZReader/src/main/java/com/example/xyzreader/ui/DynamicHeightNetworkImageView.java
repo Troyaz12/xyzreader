@@ -5,7 +5,7 @@ import android.util.AttributeSet;
 
 import com.android.volley.toolbox.NetworkImageView;
 
-public class DynamicHeightNetworkImageView extends NetworkImageView {
+public class DynamicHeightNetworkImageView extends NetworkImageView {   //NetworkImageView replaces ImageView for situations where your image is being fetched over the network via URL
     private float mAspectRatio = 1.5f;
 
     public DynamicHeightNetworkImageView(Context context) {
