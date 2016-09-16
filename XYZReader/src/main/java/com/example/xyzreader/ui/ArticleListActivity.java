@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.Loader;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.RecyclerView;
@@ -44,12 +46,20 @@ public class ArticleListActivity extends ActionBarActivity implements
         mToolbar = (Toolbar) findViewById(R.id.toolbar);   //get toolbar from the activity_article_list layout
 
 
-        final View toolbarContainerView = findViewById(R.id.toolbar_container); //gets cantainer that toolbar is in
+        final View toolbarContainerView = findViewById(R.id.toolbar_container); //gets container that toolbar is in
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout); //get layout from activity_article_list, can refresh the contents of a view via a vertical swipe gesture
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);//get layout from activity_article_list
+        Drawable dividerDrawable = ContextCompat.getDrawable(this, R.drawable.padded_divider);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this,dividerDrawable, getResources().getConfiguration().orientation));
+
+
         getLoaderManager().initLoader(0, null, this);
+
+     //   Drawable dividerDrawable = ContextCompat.getDrawable(this, R.drawable.padded_divider);
+     //   mRecyclerView.addItemDecoration(new DividerItemDecoration(this,dividerDrawable, getResources().getConfiguration().orientation));
+
 
         if (savedInstanceState == null) {
             refresh();
@@ -170,6 +180,11 @@ public class ArticleListActivity extends ActionBarActivity implements
             thumbnailView = (DynamicHeightNetworkImageView) view.findViewById(R.id.thumbnail);
             titleView = (TextView) view.findViewById(R.id.article_title);
             subtitleView = (TextView) view.findViewById(R.id.article_subtitle);
+
+
+
+
+
         }
     }
 }
