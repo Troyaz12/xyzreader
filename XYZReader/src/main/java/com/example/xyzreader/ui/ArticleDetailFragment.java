@@ -7,6 +7,8 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
@@ -17,9 +19,11 @@ import android.text.Html;
 import android.text.format.DateUtils;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -205,7 +209,23 @@ public class ArticleDetailFragment extends Fragment implements
                             if (bitmap != null) {
                                 Palette p = Palette.generate(bitmap, 12);
                                 mMutedColor = p.getDarkMutedColor(0xFF333333);
-                                mPhotoView.setImageBitmap(imageContainer.getBitmap());
+
+                              //use window manager to get window dimensions
+                                WindowManager wm = (WindowManager) getActivity().getSystemService(getActivity().WINDOW_SERVICE);
+                                Display display = wm.getDefaultDisplay();
+                                Point size = new Point();
+                                display.getSize(size);
+                                int width = size.x;
+
+                                //adjust dp to pixels so heigth will match every screen
+                                int heigth = dpToPx(304);
+
+
+                                //adjust photo heigth and width and set image to view
+                                Bitmap adjustedPhoto = scaleBitmap(imageContainer.getBitmap(),width,heigth);
+                                mPhotoView.setImageBitmap(adjustedPhoto);
+
+
                                 mRootView.findViewById(R.id.meta_bar)
                                         .setBackgroundColor(mMutedColor);
                                 updateStatusBar();
@@ -224,7 +244,28 @@ public class ArticleDetailFragment extends Fragment implements
             bodyView.setText("N/A");
         }
     }
+    //scale bitmap
+    public static Bitmap scaleBitmap(Bitmap bitmapToScale, float newWidth, float newHeight){
+        if(bitmapToScale==null)
+            return null;
 
+        //get width and heigth
+        int width = bitmapToScale.getWidth();
+        int heigth = bitmapToScale.getHeight();
+        //create a matrix for the manpulation
+        Matrix matrix = new Matrix();
+
+        //resize the bit map
+        matrix.postScale(newWidth/width,newHeight/heigth);
+
+        return Bitmap.createBitmap(bitmapToScale, 0,0, bitmapToScale.getWidth(),bitmapToScale.getHeight(), matrix,true);
+
+    }
+    //convert dp to pixels
+    private int dpToPx(int dp) {
+        float density = getActivity().getResources().getDisplayMetrics().density;
+        return Math.round((float)dp * density);
+    }
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         return ArticleLoader.newInstanceForItemId(getActivity(), mItemId);

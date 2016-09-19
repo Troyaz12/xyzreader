@@ -45,7 +45,6 @@ public class ArticleListActivity extends ActionBarActivity implements
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);   //get toolbar from the activity_article_list layout
 
-
         final View toolbarContainerView = findViewById(R.id.toolbar_container); //gets container that toolbar is in
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout); //get layout from activity_article_list, can refresh the contents of a view via a vertical swipe gesture
