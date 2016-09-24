@@ -10,7 +10,7 @@
     android:focusable="true"
     android:foreground="?selectableItemBackground">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -33,7 +33,8 @@
             android:paddingBottom="4dp"
             android:textColor="@color/textColor"
             android:ellipsize="end"
-            android:maxLines="4" />
+            android:maxLines="4"
+            android:layout_toRightOf="@id/thumbnail"/>
 
         <TextView
             android:id="@+id/article_subtitle"
@@ -46,7 +47,8 @@
             android:textColor="@color/subtextColor"
             android:maxLines="1"
             android:singleLine="true"
-            android:ellipsize="end" />
-    </LinearLayout>
+            android:ellipsize="end"
+            android:layout_toRightOf="@id/thumbnail"/>
+    </RelativeLayout>
 
 </android.support.v7.widget.CardView>
