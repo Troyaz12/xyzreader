@@ -16,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateUtils;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -44,8 +45,8 @@ public class ArticleListActivity extends ActionBarActivity implements
         setContentView(R.layout.activity_article_list);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);   //get toolbar from the activity_article_list layout
-
-        final View toolbarContainerView = findViewById(R.id.toolbar_container); //gets container that toolbar is in
+        setSupportActionBar(mToolbar);                  //set appbar
+        getSupportActionBar().setDisplayShowTitleEnabled(false);    //remove display
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout); //get layout from activity_article_list, can refresh the contents of a view via a vertical swipe gesture
 
@@ -55,10 +56,6 @@ public class ArticleListActivity extends ActionBarActivity implements
 
 
         getLoaderManager().initLoader(0, null, this);
-
-     //   Drawable dividerDrawable = ContextCompat.getDrawable(this, R.drawable.padded_divider);
-     //   mRecyclerView.addItemDecoration(new DividerItemDecoration(this,dividerDrawable, getResources().getConfiguration().orientation));
-
 
         if (savedInstanceState == null) {
             refresh();
@@ -148,6 +145,9 @@ public class ArticleListActivity extends ActionBarActivity implements
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) { //updates the RecyclerView.ViewHolder contents with the item at the given position
+
+
+
             mCursor.moveToPosition(position);
             holder.titleView.setText(mCursor.getString(ArticleLoader.Query.TITLE));
             holder.subtitleView.setText(
@@ -157,6 +157,10 @@ public class ArticleListActivity extends ActionBarActivity implements
                             DateUtils.FORMAT_ABBREV_ALL).toString()
                             + " by "
                             + mCursor.getString(ArticleLoader.Query.AUTHOR));
+
+
+
+
             holder.thumbnailView.setImageUrl(
                     mCursor.getString(ArticleLoader.Query.THUMB_URL),
                     ImageLoaderHelper.getInstance(ArticleListActivity.this).getImageLoader());
@@ -171,6 +175,7 @@ public class ArticleListActivity extends ActionBarActivity implements
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public DynamicHeightNetworkImageView thumbnailView;
+
         public TextView titleView;
         public TextView subtitleView;
 
@@ -179,11 +184,15 @@ public class ArticleListActivity extends ActionBarActivity implements
             thumbnailView = (DynamicHeightNetworkImageView) view.findViewById(R.id.thumbnail);
             titleView = (TextView) view.findViewById(R.id.article_title);
             subtitleView = (TextView) view.findViewById(R.id.article_subtitle);
-
-
-
-
-
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        //inflate menu
+        getMenuInflater().inflate(R.menu.main,menu);
+        return true;
+    }
+
+
 }
