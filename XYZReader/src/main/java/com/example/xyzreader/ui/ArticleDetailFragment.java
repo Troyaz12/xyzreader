@@ -255,7 +255,7 @@ public class ArticleDetailFragment extends Fragment implements
         //create a matrix for the manpulation
         Matrix matrix = new Matrix();
 
-        //resize the bit map
+        //resize the bit map to fit in photoContainer in fragment_article_detail.xml
         matrix.postScale(newWidth/width,newHeight/heigth);
 
         return Bitmap.createBitmap(bitmapToScale, 0,0, bitmapToScale.getWidth(),bitmapToScale.getHeight(), matrix,true);
